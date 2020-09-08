@@ -1,0 +1,34 @@
+﻿<script src="~/Scripts/jquery-3.4.1.min.js"></script>
+<link rel="stylesheet" href="~/Content/themes/base/jquery-ui.css" />
+<script src="~/Scripts/jquery-ui-1.12.1.js"></script>
+
+<div>
+    <label>People Search:</label>
+    <input class="form-control" id="searchInput" />
+
+    <input class="form-control" id="selected" />
+</div>
+
+<script>
+    $("#searchInput").autocomplete({
+        source: function (request, response) {
+            $('#selected').val("");
+            $.ajax({
+                
+                url: '@Url.Action("GetSearchValues", "Home")',
+                dataType: "json",
+                data: { search: $("#searchInput").val() },
+                success: function (data) {
+                    response($.map(data, function (item) {
+                        $('#selected').val(item.Id);
+                        return { label: item.Firstname, value: item.Firstname };
+                        
+                    }))
+                },
+                error: function (xhr, status, error) {
+                    alert("Error");
+                }
+            });
+        }
+    });
+</script>
